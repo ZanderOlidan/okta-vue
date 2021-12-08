@@ -40,8 +40,8 @@ const guardSecureRoute = async (authState: AuthState | null) => {
 export const navigationGuard = async (to: RouteLocationNormalized) => {
   // clear any subscribed guardSecureRoute
   _oktaAuth.authStateManager.unsubscribe(guardSecureRoute)
-
-  if (to.matched.some(record => record.meta.requiresAuth)) {
+  const isRouteProtected = !to.matched.some(record => record.meta.allowUnauthed);
+  if (isRouteProtected) {
     // track the originalUri for guardSecureRoute
     originalUriTracker = to.fullPath
 
